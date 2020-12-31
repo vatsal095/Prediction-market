@@ -8,12 +8,14 @@ contract MyDeFiProject is IERC1155TokenReceiver {
   IERC20 dai;
   IConditionalTokens conditionalTokens;
   address public oracle;
+  address admin;
   mapping(bytes32 => mapping(uint => uint)) public tokenBalance; //balance of conditional tokens, indexed by questionId and indexSet 
 
   constructor(address _dai, address _conditionalTokens, address _oracle) public {
     dai = IERC20(_dai);
     conditionalTokens = IConditionalTokens(_conditionalTokens);
     oracle = _oracle;
+    admin = msg.sender;
   }
 
   function createBet(bytes32 questionId, uint amount) external {
