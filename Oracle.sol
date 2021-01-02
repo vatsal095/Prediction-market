@@ -1,27 +1,24 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.6.0;
 
 import './IConditionalTokens.sol';
 
-contract Oracle {
-  address admin;
+contract Contractoracle {
   address myDefiProject;
   IConditionalTokens conditionalTokens;
+  uint public pastBlockTime;  
 
-  event NewBet(bytes32 questionId);
+  
 
   constructor(address _myDefiProject, address _conditionalTokens) public {
-    admin = msg.sender;
     myDefiProject = _myDefiProject;
     conditionalTokens = IConditionalTokens(_conditionalTokens);
   }
 
-  function reportPayout(bytes32 questionId, uint[] calldata payouts) external {
-    require(msg.sender == admin, 'only admin');
+  function reportPayout(bytes32 questionId) external {
+    payouts = [0,1,0];
+    pastBlockTime = block.timestamp;
+
+    require(block.timestamp == pastBlockTime + 2 days );
     conditionalTokens.reportPayouts(questionId, payouts);
   }
-
-  function monitorOutcome(bytes32 questionId) external {
-    require(msg.sender == myDefiProject, 'only myDefiProject');
-    emit NewBet(questionId);
-  }
-}1
+}
